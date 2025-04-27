@@ -29,6 +29,7 @@ def run_traceroutes(targets, hostnames, min_ttl, max_ttl,
                     probes_per_ttl, port, packet_size, wait_time, timeout):
     all_results = {}
     for ip, host in zip(targets, hostnames):
+        
         hops = []
         for ttl in track(range(min_ttl, max_ttl+1), description=f"Tracing {ip}"):
             series = []
