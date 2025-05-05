@@ -1,0 +1,546 @@
+{
+  "8.8.8.8": {
+    "host": "dns.google",
+    "hops": [
+      {
+        "ttl": 1,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.012634038925170898
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.010000944137573242
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.014028787612915039
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": 0.012634038925170898,
+              "src": "10.209.64.1",
+              "code": 0
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": 0.010000944137573242,
+              "src": "10.209.64.1",
+              "code": 0
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.014028787612915039,
+              "src": "10.209.64.1",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 2,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.017115354537963867
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.013720989227294922
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.01768970489501953
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": 0.017115354537963867,
+              "src": "10.213.33.33",
+              "code": 0
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": 0.013720989227294922,
+              "src": "10.213.33.33",
+              "code": 0
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.01768970489501953,
+              "src": "10.213.33.25",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 3,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.056668758392333984
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.0466160774230957
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": 0.056668758392333984,
+              "src": "10.213.32.41",
+              "code": 0
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.0466160774230957,
+              "src": "10.213.32.41",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 4,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.0150299072265625
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.0150299072265625,
+              "src": "10.213.32.22",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 5,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.051770925521850586
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.051770925521850586,
+              "src": "203.85.128.94",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 6,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.03987312316894531
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.03987312316894531,
+              "src": "202.76.18.72",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 7,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.050972938537597656
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.050972938537597656,
+              "src": "202.76.18.60",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 8,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.061379194259643555
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.061379194259643555,
+              "src": "123.255.90.205",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 9,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.04436302185058594
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.04436302185058594,
+              "src": "192.178.111.191",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 10,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.0471501350402832
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.0471501350402832,
+              "src": "216.239.46.205",
+              "code": 0
+            }
+          ]
+        ]
+      },
+      {
+        "ttl": 11,
+        "metrics": {
+          "UDP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "TCP": {
+            "sent": 1,
+            "recv": 0,
+            "loss": 1.0,
+            "avg_rtt": null
+          },
+          "ICMP": {
+            "sent": 1,
+            "recv": 1,
+            "loss": 0.0,
+            "avg_rtt": 0.04251694679260254
+          }
+        },
+        "series": [
+          [
+            {
+              "proto": "UDP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "TCP",
+              "rtt": null,
+              "src": null,
+              "code": null
+            }
+          ],
+          [
+            {
+              "proto": "ICMP",
+              "rtt": 0.04251694679260254,
+              "src": "8.8.8.8",
+              "code": 0
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}
