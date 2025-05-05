@@ -18,7 +18,7 @@ Typical use:
 import argparse, sys, webbrowser, pandas as pd
 from probe import run_traceroutes               # probe,traceroute.py
 from parser import save_aggregated            # parser.py
-from interactive_viz import build_graph, visualise # interactive_viz.py
+from interactive_viz import build_map # interactive_viz.py
 
 def cmd_run(args):
     df = pd.read_csv(args.targets)
@@ -32,7 +32,7 @@ def cmd_run(args):
         timeout = args.timeout
     )
     save_aggregated(raw, args.out)
-    html = visualise(build_graph(raw))
+    html = build_map(raw)
     print("✓ done - opening", html)
     webbrowser.open(html.as_uri())
 
@@ -40,7 +40,7 @@ def cmd_view(args):
     import json, pathlib
     with open(args.raw) as f:
         raw = json.load(f)
-    html = visualise(build_graph(raw))
+    html = build_map(raw)
     print("Opening", html)
     webbrowser.open(html.as_uri())
 
