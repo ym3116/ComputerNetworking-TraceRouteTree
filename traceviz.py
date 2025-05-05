@@ -16,9 +16,9 @@ Typical use:
 """
 
 import argparse, sys, webbrowser, pandas as pd
-from probe import run_traceroutes, single_probe               # ← our existing logic
-from parser import save_aggregated
-from interactive_viz import build_graph, visualise
+from probe import run_traceroutes               # probe,traceroute.py
+from parser import save_aggregated            # parser.py
+from interactive_viz import build_graph, visualise # interactive_viz.py
 
 def cmd_run(args):
     df = pd.read_csv(args.targets)

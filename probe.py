@@ -1,57 +1,92 @@
+# probe.py  (new version, use threadpooling to speed up traceroutes)
+
 import time
-from scapy.all import IP, UDP, TCP, ICMP, sr1, conf
-from rich.progress import track
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from scapy.all import IP, UDP, TCP, ICMP, sr, conf
 
-conf.verb = 0  # silence Scapy
+conf.verb = 0          # silence Scapy
 
-def single_probe(dst, ttl, port, size, proto, timeout):
-    ip = IP(dst=dst, ttl=ttl)
-    payload = b'X' * (size - len(ip))  # adjust so total ≈ `size`
-    if proto == 'UDP':
-        pkt = ip/UDP(dport=port)/payload
-    elif proto == 'TCP':
-        pkt = ip/TCP(dport=port, flags='S')/payload
-    else:  # ICMP
-        pkt = ip/ICMP()/payload
+# ----------------------------------------------------------------------
+# fast per‑target tracer ------------------------------------------------
+# ----------------------------------------------------------------------
+def _trace_target(ip, host, *, min_ttl, max_ttl,
+                  probes_per_ttl, port, packet_size,
+                  timeout, protos=('UDP', 'TCP', 'ICMP')):
+    """
+    Build one big batch of probes (TTL × proto × probes_per_ttl),
+    send them in a single sr() call, collate replies.
+    Returns {'host': host, 'hops': [...] }  — identical shape to old code.
+    """
+    pkts = []
+    for ttl in range(min_ttl, max_ttl + 1):
+        for proto in protos:
+            for _ in range(probes_per_ttl):
+                ip_layer = IP(dst=ip, ttl=ttl)
+                l4 = UDP(dport=port)   if proto == 'UDP' else \
+                     TCP(dport=port, flags='S') if proto == 'TCP' else \
+                     ICMP()
+                payload = b'X' * max(0, packet_size - len(ip_layer))  # pad
+                pkts.append(ip_layer / l4 / payload)
 
-    start = time.time()
-    resp = sr1(pkt, timeout=timeout)
-    end = time.time()
+    answered, _ = sr(pkts, timeout=timeout)
 
-    return {
-        'proto': proto,
-        'rtt': (end - start) if resp else None,
-        'src': resp.src if resp else None,
-        'code': getattr(resp, 'code', None)
-    }
+    # map (ttl, proto) -> best response (first wins)
+    resp_map = {}
+    for snd, rcv in answered:
+        ttl   = snd.ttl
+        proto = 'UDP' if UDP in snd else ('TCP' if TCP in snd else 'ICMP')
+        resp_map.setdefault((ttl, proto), {
+            'proto': proto,
+            'rtt': rcv.time - snd.sent_time,
+            'src': rcv.src,
+            'code': getattr(rcv, 'code', None)
+        })
 
+    hops = []
+    for ttl in range(min_ttl, max_ttl + 1):
+        series = []
+        for proto in protos:
+            series.append([resp_map.get((ttl, proto), {
+                'proto': proto, 'rtt': None, 'src': None, 'code': None
+            })])
+        hops.append({'ttl': ttl, 'series': series})
+        if any(e['src'] == ip for s in series for e in s):
+            break
+
+    return {'host': host or None, 'hops': hops}
+
+# ----------------------------------------------------------------------
+# public API ------------------------------------------------------------
+# ----------------------------------------------------------------------
 def run_traceroutes(targets, hostnames, min_ttl, max_ttl,
-                    probes_per_ttl, port, packet_size, wait_time, timeout):
-    all_results = {}
-    for ip, host in zip(targets, hostnames):
-        hops = []
-        for ttl in track(range(min_ttl, max_ttl+1), description=f"Tracing {ip}"):
-            series = []
-            for proto in ('UDP','TCP','ICMP'):
-                proto_resps = []
-                for _ in range(probes_per_ttl):
-                    probe_result = single_probe(
-                        dst=ip,
-                        ttl=ttl,
-                        port=port,
-                        size=packet_size,
-                        proto=proto,
-                        timeout=timeout
-                    )
-                    proto_resps.append(probe_result)
-                    time.sleep(wait_time)
-                series.append(proto_resps)
-            hops.append({'ttl': ttl, 'series': series})
+                    probes_per_ttl, port, packet_size,
+                    wait_time,          # kept for signature compatibility
+                    timeout):
+    """
+    Launch one traceroute per destination in parallel threads.
+    Returns the same dict shape the old implementation produced.
+    """
+    results = {}
+    with ThreadPoolExecutor(max_workers=len(targets)) as pool:
+        fut = {
+            pool.submit(
+                _trace_target, ip, host,
+                min_ttl=min_ttl, max_ttl=max_ttl,
+                probes_per_ttl=probes_per_ttl,
+                port=port, packet_size=packet_size,
+                timeout=timeout
+            ): ip
+            for ip, host in zip(targets, hostnames)
+        }
+        for f in as_completed(fut):
+            ip = fut[f]
+            try:
+                results[ip] = f.result()
+            except Exception as e:
+                results[ip] = {'host': hostnames[targets.index(ip)], 'hops': [],
+                               'error': str(e)}
+    return results
 
-            # stop if we’ve reached the target IP
-            last_srcs = [p['src'] for proto in series for p in proto if p['src']]
-            if ip in last_srcs:
-                break
-
-        all_results[ip] = {'host': host or None, 'hops': hops}
-    return all_results
+# optional stub in case some script still imports it
+def single_probe(*_a, **_kw):
+    raise NotImplementedError("single_probe was removed in the speed‑up refactor")
