@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 This file is to optimize user workflow. we just need to run this file
-example use:
+example using:
+
 python traceviz.py run sample_ips.csv --min-ttl 1 --max-ttl 20 --probes 1
 
 traceviz.py - run multi-protocol traceroutes *and* visualise them.

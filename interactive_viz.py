@@ -57,7 +57,7 @@ def visualise(G, outfile="tracetree.html"):
         color = PROTO_COLOR[d["proto"]]
         length = max(100, min(700, int((d["rtt"] or 0.1)*800)))  # px
         width  = max(1, int((1 - d["loss"]) * 6))               # 1–6 px
-        title  = f"{d['proto']} {u}→{v}<br>avg RTT: {d['rtt']*1000 if d['rtt'] else '‒'} ms<br>loss: {d['loss']*100:.0f}%"
+        title  = f"{d['proto']} {u}→{v}<br>avg RTT: {d['rtt']*1000 if d['rtt'] else '-'} ms<br>loss: {d['loss']*100:.0f}%"
         net.add_edge(u, v, color=color, width=width, length=length, title=title)
     net.show(outfile)
     return Path(outfile).resolve()
