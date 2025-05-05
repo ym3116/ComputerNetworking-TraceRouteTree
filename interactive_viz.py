@@ -10,16 +10,20 @@ from pyvis.network import Network
 
 PROTO_COLOR = {"UDP": "#1f77b4", "TCP": "#2ca02c", "ICMP": "#ff7f0e"}
 
-def _aggregate_link(series):
-    """series = list[probe_dict] (exactly the 3 packets we sent at this hop)"""
+def _aggregate_link(all_series):
+    """series = list[list[probe_dict]] 
+    (Every TTL we sent N series; each series has exactly 3 probe packets.)
+    Aggregate them into loss + avg-RTT metrics per protocol.
+    """
     by_proto = {}
-    for p in series:
-        pkt_ok = p.get("rtt") is not None
-        d = by_proto.setdefault(p["proto"], {"sent": 0, "recv": 0, "rtts": []})
-        d["sent"] += 1
-        if pkt_ok:
-            d["recv"] += 1
-            d["rtts"].append(p["rtt"])
+    for series in all_series:
+        for p in series:
+            #pkt_ok = p.get("rtt") is not None
+            d = by_proto.setdefault(p["proto"], {"sent": 0, "recv": 0, "rtts": []})
+            d["sent"] += 1
+            if p.get("rtt") is not None:
+                d["recv"] += 1
+                d["rtts"].append(p["rtt"])
     out = {}
     for proto, stats in by_proto.items():
         loss = 1 - stats["recv"] / stats["sent"]
@@ -59,7 +63,8 @@ def visualise(G, outfile="tracetree.html"):
         width  = max(1, int((1 - d["loss"]) * 6))               # 1–6 px
         title  = f"{d['proto']} {u}→{v}<br>avg RTT: {d['rtt']*1000 if d['rtt'] else '‒'} ms<br>loss: {d['loss']*100:.0f}%"
         net.add_edge(u, v, color=color, width=width, length=length, title=title)
-    net.show(outfile)
+    #net.show(outfile)
+    net.write_html(outfile, notebook=False, open_browser=False)
     return Path(outfile).resolve()
 
 if __name__ == "__main__":
