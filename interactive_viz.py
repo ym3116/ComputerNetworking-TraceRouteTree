@@ -54,8 +54,10 @@ def build_map(results: Dict[str, Any], outfile: str = "tracetree_map.html") -> P
     centre_lat = statistics.median([c[0] for c in coords]) if coords else 0
     centre_lon = statistics.median([c[1] for c in coords]) if coords else 0
 
-    m = folium.Map(location=(centre_lat, centre_lon), zoom_start=2, tiles="CartoDB positron")
-
+    fig = folium.Figure()
+    m = folium.Map(location=(centre_lat, centre_lon), zoom_start=2, tiles="CartoDB positron", control_scale=True)
+    m.add_to(fig)
+    
     # toggle‑able layers: one per protocol
     layers = {proto: folium.FeatureGroup(name=f"{proto} links", show=True) for proto in PROTO_COLOR}
     for layer in layers.values():
@@ -106,7 +108,7 @@ def build_map(results: Dict[str, Any], outfile: str = "tracetree_map.html") -> P
             prev_lat, prev_lon = lat, lon
 
     folium.LayerControl(collapsed=False).add_to(m)
-    m.save(outfile)
+    fig.save(outfile)
     return Path(outfile).resolve()
 
 # ──────────────────────────────────────────────────────────────────────────────
