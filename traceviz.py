@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This file is to optimize user workflow. we just need to run this file
+This is the main backend file that fetch input data from landing page and calls traceroute function(probe and parser)
 example using:
 
 python traceviz.py run sample_ips.csv --min-ttl 1 --max-ttl 20 --probes 1
@@ -16,12 +16,23 @@ Typical use:
 """
 
 import argparse, sys, webbrowser, pandas as pd
+import os
 from probe import run_traceroutes               # probe,traceroute.py
 from parser import save_aggregated            # parser.py
 from interactive_viz import build_page # interactive_viz.py
 
 def cmd_run(args):
-    df = pd.read_csv(args.targets)
+    # ensures that both csv and txt files are supported
+    ext = os.path.splitext(args.targets)[-1].lower()
+    if ext == ".csv":
+        df = pd.read_csv(args.targets)
+    elif ext == ".txt":
+        with open(args.targets, "r") as f:
+            lines = [line.strip() for line in f if line.strip()]
+        df = pd.DataFrame({"IP": lines, "Hostname": [""] * len(lines)})
+    else:
+        raise ValueError("Unsupported file format: use .csv or .txt")
+
     print(f"↻ Tracing {len(df)} destinations …")
     raw = run_traceroutes(
         targets   = df['IP'].tolist(),
