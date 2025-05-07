@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Main() {
+function Landing() {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -16,4 +16,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Landing;
