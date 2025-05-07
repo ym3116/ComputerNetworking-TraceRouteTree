@@ -40,7 +40,7 @@ def cmd_view(args):
     import json, pathlib
     with open(args.raw) as f:
         raw = json.load(f)
-    html = build_map(raw)
+    html = build_page(raw)
     print("Opening", html)
     webbrowser.open(html.as_uri())
 

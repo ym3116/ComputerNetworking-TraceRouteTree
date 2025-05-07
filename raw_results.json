@@ -9,43 +9,43 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.09740018844604492
+            "avg_rtt": 0.016090869903564453
           },
           "TCP": {
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.006273984909057617
+            "avg_rtt": 0.008752822875976562
           },
           "ICMP": {
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.005608081817626953
+            "avg_rtt": 0.00845193862915039
           }
         },
         "series": [
           [
             {
               "proto": "UDP",
-              "rtt": 0.09740018844604492,
-              "src": "10.209.64.1",
+              "rtt": 0.016090869903564453,
+              "src": "10.213.33.33",
               "code": 0
             }
           ],
           [
             {
               "proto": "TCP",
-              "rtt": 0.006273984909057617,
-              "src": "10.209.64.1",
+              "rtt": 0.008752822875976562,
+              "src": "10.213.32.41",
               "code": 0
             }
           ],
           [
             {
               "proto": "ICMP",
-              "rtt": 0.005608081817626953,
-              "src": "10.209.64.1",
+              "rtt": 0.00845193862915039,
+              "src": "10.213.33.25",
               "code": 0
             }
           ]
@@ -58,34 +58,34 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.0062770843505859375
+            "avg_rtt": 0.008232831954956055
           },
           "TCP": {
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.004934787750244141
+            "avg_rtt": 0.008009910583496094
           },
           "ICMP": {
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.003928184509277344
+            "avg_rtt": 0.0077440738677978516
           }
         },
         "series": [
           [
             {
               "proto": "UDP",
-              "rtt": 0.0062770843505859375,
-              "src": "10.213.33.33",
+              "rtt": 0.008232831954956055,
+              "src": "10.209.64.1",
               "code": 0
             }
           ],
           [
             {
               "proto": "TCP",
-              "rtt": 0.004934787750244141,
+              "rtt": 0.008009910583496094,
               "src": "10.213.33.33",
               "code": 0
             }
@@ -93,8 +93,8 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.003928184509277344,
-              "src": "10.213.33.25",
+              "rtt": 0.0077440738677978516,
+              "src": "10.213.32.41",
               "code": 0
             }
           ]
@@ -113,13 +113,13 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.005346059799194336
+            "avg_rtt": 0.007318973541259766
           },
           "ICMP": {
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.005959033966064453
+            "avg_rtt": 0.007055759429931641
           }
         },
         "series": [
@@ -134,16 +134,16 @@
           [
             {
               "proto": "TCP",
-              "rtt": 0.005346059799194336,
-              "src": "10.213.32.41",
+              "rtt": 0.007318973541259766,
+              "src": "10.209.64.1",
               "code": 0
             }
           ],
           [
             {
               "proto": "ICMP",
-              "rtt": 0.005959033966064453,
-              "src": "10.213.32.41",
+              "rtt": 0.007055759429931641,
+              "src": "10.209.64.1",
               "code": 0
             }
           ]
@@ -168,7 +168,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.006406068801879883
+            "avg_rtt": 0.006273984909057617
           }
         },
         "series": [
@@ -191,7 +191,7 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.006406068801879883,
+              "rtt": 0.006273984909057617,
               "src": "10.213.32.22",
               "code": 0
             }
@@ -217,7 +217,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.03573179244995117
+            "avg_rtt": 0.035218000411987305
           }
         },
         "series": [
@@ -240,7 +240,7 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.03573179244995117,
+              "rtt": 0.035218000411987305,
               "src": "203.85.128.94",
               "code": 0
             }
@@ -266,7 +266,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.03765082359313965
+            "avg_rtt": 0.03454995155334473
           }
         },
         "series": [
@@ -289,7 +289,7 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.03765082359313965,
+              "rtt": 0.03454995155334473,
               "src": "202.76.18.72",
               "code": 0
             }
@@ -315,7 +315,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.03689908981323242
+            "avg_rtt": 0.03608584403991699
           }
         },
         "series": [
@@ -338,7 +338,7 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.03689908981323242,
+              "rtt": 0.03608584403991699,
               "src": "202.76.18.60",
               "code": 0
             }
@@ -364,7 +364,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.039784908294677734
+            "avg_rtt": 0.036730289459228516
           }
         },
         "series": [
@@ -387,56 +387,7 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.039784908294677734,
-              "src": "123.255.90.205",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 9,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.039010047912597656
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.039010047912597656,
+              "rtt": 0.036730289459228516,
               "src": "216.239.46.205",
               "code": 0
             }
@@ -444,501 +395,6 @@
         ]
       },
       {
-        "ttl": 10,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.03824591636657715
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.03824591636657715,
-              "src": "192.178.111.191",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 11,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.037487030029296875
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.037487030029296875,
-              "src": "8.8.8.8",
-              "code": 0
-            }
-          ]
-        ]
-      }
-    ]
-  },
-  "140.82.113.3": {
-    "host": "github.com",
-    "hops": [
-      {
-        "ttl": 1,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.10970902442932129
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.006326198577880859
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.004133939743041992
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": 0.10970902442932129,
-              "src": "10.209.64.1",
-              "code": 0
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": 0.006326198577880859,
-              "src": "10.209.64.1",
-              "code": 0
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.004133939743041992,
-              "src": "10.209.64.1",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 2,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.0076007843017578125
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.0062711238861083984
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.005299091339111328
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": 0.0076007843017578125,
-              "src": "10.213.33.25",
-              "code": 0
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": 0.0062711238861083984,
-              "src": "10.213.33.25",
-              "code": 0
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.005299091339111328,
-              "src": "10.213.33.33",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 3,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.0066258907318115234
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.006163835525512695
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": 0.0066258907318115234,
-              "src": "10.213.33.137",
-              "code": 0
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.006163835525512695,
-              "src": "10.213.33.137",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 4,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.007875919342041016
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.007875919342041016,
-              "src": "10.213.33.150",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 5,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.007033109664916992
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.007033109664916992,
-              "src": "10.122.117.209",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 6,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.19257616996765137
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.19257616996765137,
-              "src": "10.117.219.101",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 7,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.1917860507965088
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.1917860507965088,
-              "src": "10.117.219.102",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 8,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.19300484657287598
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.19300484657287598,
-              "src": "209.120.137.217",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
         "ttl": 9,
         "metrics": {
           "UDP": {
@@ -957,7 +413,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.19830799102783203
+            "avg_rtt": 0.036004066467285156
           }
         },
         "series": [
@@ -980,8 +436,8 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.19830799102783203,
-              "src": "213.200.115.178",
+              "rtt": 0.036004066467285156,
+              "src": "123.255.90.205",
               "code": 0
             }
           ]
@@ -1006,7 +462,7 @@
             "sent": 1,
             "recv": 1,
             "loss": 0.0,
-            "avg_rtt": 0.19759202003479004
+            "avg_rtt": 0.03689002990722656
           }
         },
         "series": [
@@ -1029,57 +485,8 @@
           [
             {
               "proto": "ICMP",
-              "rtt": 0.19759202003479004,
-              "src": "69.174.5.178",
-              "code": 0
-            }
-          ]
-        ]
-      },
-      {
-        "ttl": 11,
-        "metrics": {
-          "UDP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "TCP": {
-            "sent": 1,
-            "recv": 0,
-            "loss": 1.0,
-            "avg_rtt": null
-          },
-          "ICMP": {
-            "sent": 1,
-            "recv": 1,
-            "loss": 0.0,
-            "avg_rtt": 0.2037060260772705
-          }
-        },
-        "series": [
-          [
-            {
-              "proto": "UDP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "TCP",
-              "rtt": null,
-              "src": null,
-              "code": null
-            }
-          ],
-          [
-            {
-              "proto": "ICMP",
-              "rtt": 0.2037060260772705,
-              "src": "140.82.113.3",
+              "rtt": 0.03689002990722656,
+              "src": "8.8.8.8",
               "code": 0
             }
           ]
