@@ -57,5 +57,10 @@ def api_trace():
     print(results)
     return jsonify(results)
 
+@app.route("/api/visulize", methods=["POST"])
+def api_visulize():
+    return
+
+
 if __name__ == "__main__":
     app.run(debug=True)
