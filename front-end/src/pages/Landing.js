@@ -1,8 +1,11 @@
 // src/pages/Landing.js
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
+  const navigate = useNavigate();
+
   const [file, setFile] = useState(null);
   const [minTtl, setMinTtl] = useState("");
   const [maxTtl, setMaxTtl] = useState("");
@@ -11,18 +14,20 @@ export default function Landing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) return alert("Pick a file first!");
+
     const fd = new FormData();
     fd.append("file", file);
-    if (minTtl)  fd.append("min_ttl", minTtl);
-    if (maxTtl)  fd.append("max_ttl", maxTtl);
-    if (probes)  fd.append("probes", probes);
+    if (minTtl) fd.append("min_ttl", minTtl);
+    if (maxTtl) fd.append("max_ttl", maxTtl);
+    if (probes) fd.append("probes", probes);
 
     const rsp = await fetch("http://localhost:5000/api/trace", {
       method: "POST",
       body: fd,
     });
     const { result_url } = await rsp.json();
-    window.location.href = result_url;
+    // redirect through SPA route so we can show a spinner
+    navigate(`/result?url=${encodeURIComponent(result_url)}`);
   };
 
   return (
