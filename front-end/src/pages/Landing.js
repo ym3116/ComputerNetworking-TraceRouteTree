@@ -1,3 +1,9 @@
+<<<<<<< Updated upstream
+=======
+// src/pages/Landing.js
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+>>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 
 function Landing() {
