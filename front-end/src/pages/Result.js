@@ -48,7 +48,7 @@ export default function Result() {
       <TraceMap hops={flattened} focus={focusedHop} />
 
       {/* ✅ Table Section */}
-      <h4 className="mt-5 mb-3">Detailed Table</h4>
+      <h4 className="mt-5 mb-3">Detailed Table (you may click on the public ips to zoom in on the location)</h4>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
