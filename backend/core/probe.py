@@ -1,92 +1,94 @@
 # probe.py  (new version, use threadpooling to speed up traceroutes)
 
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from scapy.all import IP, UDP, TCP, ICMP, sr, conf
+from scapy.all import IP, UDP, TCP, ICMP, sr
+from collections import defaultdict
+#from .utils import generate_current_od_calls
+import ipinfo
 
-conf.verb = 0          # silence Scapy
+# ⬇️ Geolocation support via ipinfo.io
+ipinfo_token = "your_ipinfo_token_here"  # ← replace with your token
+ipinfo_handler = ipinfo.getHandler(ipinfo_token)
 
-# ----------------------------------------------------------------------
-# fast per‑target tracer ------------------------------------------------
-# ----------------------------------------------------------------------
-def _trace_target(ip, host, *, min_ttl, max_ttl,
-                  probes_per_ttl, port, packet_size,
-                  timeout, protos=('UDP', 'TCP', 'ICMP')):
-    """
-    Build one big batch of probes (TTL × proto × probes_per_ttl),
-    send them in a single sr() call, collate replies.
-    Returns {'host': host, 'hops': [...] }  — identical shape to old code.
-    """
-    pkts = []
-    for ttl in range(min_ttl, max_ttl + 1):
-        for proto in protos:
-            for _ in range(probes_per_ttl):
-                ip_layer = IP(dst=ip, ttl=ttl)
-                l4 = UDP(dport=port)   if proto == 'UDP' else \
-                     TCP(dport=port, flags='S') if proto == 'TCP' else \
-                     ICMP()
-                payload = b'X' * max(0, packet_size - len(ip_layer))  # pad
-                pkts.append(ip_layer / l4 / payload)
+# ⬇️ Returns {"lat": ..., "lon": ...} if available, else {}
+def get_geo(ip):
+    try:
+        details = ipinfo_handler.getDetails(ip)
+        loc = details.loc
+        if loc:
+            lat, lon = map(float, loc.split(','))
+            return { "lat": lat, "lon": lon }
+    except:
+        pass
+    return {}
 
-    answered, _ = sr(pkts, timeout=timeout)
+# ⬇️ Build a probe packet with given TTL, protocol, port, size
+def _build_probe(ip, ttl, proto, port, size):
+    pkt = IP(dst=ip, ttl=ttl)
+    if proto == "UDP":
+        pkt /= UDP(dport=port)/("X" * size)
+    elif proto == "TCP":
+        pkt /= TCP(dport=port)/("X" * size)
+    elif proto == "ICMP":
+        pkt /= ICMP()/("X" * size)
+    return pkt
 
-    # map (ttl, proto) -> best response (first wins)
-    resp_map = {}
-    for snd, rcv in answered:
-        ttl   = snd.ttl
-        proto = 'UDP' if UDP in snd else ('TCP' if TCP in snd else 'ICMP')
-        resp_map.setdefault((ttl, proto), {
-            'proto': proto,
-            'rtt': rcv.time - snd.sent_time,
-            'src': rcv.src,
-            'code': getattr(rcv, 'code', None)
+# ⬇️ Sends probes to a target IP for all TTLs and protocols
+def _trace_target(
+    ip, min_ttl=1, max_ttl=20, probes=1, port=80, size=60, timeout=1
+):
+    hops = []
+    for ttl in range(min_ttl, max_ttl+1):
+        series = []
+        # ⬇️ Send multiple series of probes
+        for _ in range(probes):
+            batch = []
+            for proto in ("UDP", "TCP", "ICMP"):
+                pkt = _build_probe(ip, ttl, proto, port, size)
+                batch.append(pkt)
+
+            # ⬇️ Send batch and collect responses
+            answered, _ = sr(batch, timeout=timeout, verbose=False)
+
+            # ⬇️ Build a map of (ttl, proto) → reply data
+            resp_map = {}
+            for snd, rcv in answered:
+                proto = snd.payload.name
+                rtt = rcv.time - snd.sent_time
+                resp_map[(ttl, proto)] = {
+                    "proto": proto,
+                    "rtt": rtt,
+                    "src": rcv.src,
+                    "code": rcv.getlayer(1).type if proto == "ICMP" else rcv.getlayer(1).flags
+                }
+
+            # ✅ for map visualization: Add geolocation info to each probe result
+            for proto in ("UDP", "TCP", "ICMP"):
+                entry = resp_map.get((ttl, proto), {
+                    "proto": proto,
+                    "rtt": None,
+                    "src": None,
+                    "code": None
+                })
+                if entry["src"]:
+                    entry.update(get_geo(entry["src"]))  # ⬅️ adds "lat" and "lon"
+                series.append([entry])  # ⬅️ keep grouped by protocol
+
+        # ⬇️ Save full set of responses per TTL
+        hops.append({
+            "ttl": ttl,
+            "series": series
         })
 
-    hops = []
-    for ttl in range(min_ttl, max_ttl + 1):
-        series = []
-        for proto in protos:
-            series.append([resp_map.get((ttl, proto), {
-                'proto': proto, 'rtt': None, 'src': None, 'code': None
-            })])
-        hops.append({'ttl': ttl, 'series': series})
-        if any(e['src'] == ip for s in series for e in s):
-            break
+    return hops
 
-    return {'host': host or None, 'hops': hops}
-
-# ----------------------------------------------------------------------
-# public API ------------------------------------------------------------
-# ----------------------------------------------------------------------
-def run_traceroutes(targets, hostnames, min_ttl, max_ttl,
-                    probes_per_ttl, port, packet_size,
-                    wait_time,          # kept for signature compatibility
-                    timeout):
-    """
-    Launch one traceroute per destination in parallel threads.
-    Returns the same dict shape the old implementation produced.
-    """
+# ⬇️ Wrapper: handles multiple targets
+def run_traceroutes(targets, min_ttl=1, max_ttl=20, probes=1, port=80, size=60, timeout=1):
     results = {}
-    with ThreadPoolExecutor(max_workers=len(targets)) as pool:
-        fut = {
-            pool.submit(
-                _trace_target, ip, host,
-                min_ttl=min_ttl, max_ttl=max_ttl,
-                probes_per_ttl=probes_per_ttl,
-                port=port, packet_size=packet_size,
-                timeout=timeout
-            ): ip
-            for ip, host in zip(targets, hostnames)
+    for ip, host in targets:
+        hops = _trace_target(ip, min_ttl, max_ttl, probes, port, size, timeout)
+        results[ip] = {
+            "host": host,
+            "hops": hops
         }
-        for f in as_completed(fut):
-            ip = fut[f]
-            try:
-                results[ip] = f.result()
-            except Exception as e:
-                results[ip] = {'host': hostnames[targets.index(ip)], 'hops': [],
-                               'error': str(e)}
     return results
-
-# optional stub in case some script still imports it
-def single_probe(*_a, **_kw):
-    raise NotImplementedError("single_probe was removed in the speed‑up refactor")

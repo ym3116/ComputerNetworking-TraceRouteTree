@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Table, Alert } from "react-bootstrap";
+import TraceMap from "../components/TraceMap";
 
 export default function Result() {
   const location = useLocation();
@@ -30,6 +31,8 @@ export default function Result() {
           proto: probe.proto,
           ip: probe.src,
           rtt: probe.rtt,
+          lat: probe.lat, // ✅ include lat/lon for the map
+          lon: probe.lon,
         }))
       );
     });
@@ -39,6 +42,12 @@ export default function Result() {
     <Container className="py-4">
       <h2 className="mb-4 text-center">Traceroute Results</h2>
 
+      {/* ✅ Map Section */}
+      <h4 className="mb-3">Interactive Map</h4>
+      <TraceMap hops={flattened} />
+
+      {/* ✅ Table Section */}
+      <h4 className="mt-5 mb-3">Detailed Table</h4>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
