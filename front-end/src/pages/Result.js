@@ -5,8 +5,10 @@ import { Table, Container, Alert } from "react-bootstrap";
 
 export default function Result() {
   const location = useLocation();
+  // ⬆️ useLocation() gets access to whatever was passed using navigate('/result', { state: { data } }) in Landing.js
   const data = location.state?.data;
-
+  // ⬆️ data is the result of the traceroute from the backend
+  
   if (!data || !Array.isArray(data)) {
     return <Alert variant="danger">No result data received.</Alert>;
   }
