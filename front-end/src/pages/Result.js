@@ -9,6 +9,10 @@ import {
   Accordion,
 } from "react-bootstrap";
 import TraceMap from "../components/TraceMap";
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+
 
 export default function Result() {
   const location = useLocation();
@@ -51,13 +55,89 @@ export default function Result() {
     return acc;
   }, {});
 
-  // 🆕 Flattened list of all hops across all destinations (for map)
+  // Flattened list of all hops across all destinations (for map)
   const allHops = Object.values(grouped).flatMap((entry) => entry.hops);
+
+
+  // 🆕 Converts and downloads result as chosen format
+  function handleDownload(data, format = "json") {
+    const blobMap = {
+      json: () =>
+        new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        }),
+      txt: () =>
+        new Blob([JSON.stringify(data, null, 2)], {
+          type: "text/plain",
+        }),
+      csv: () => {
+        let csv = "Target,Host,TTL,Protocol,IP,RTT\n";
+        Object.entries(data).forEach(([target, result]) => {
+          const host = result.host || "";
+          const hops = result.hops || [];
+          hops.forEach((hop) => {
+            const ttl = hop.ttl;
+            const series = hop.series;
+            series.forEach((probes) => {
+              probes.forEach((probe) => {
+                csv += `${target},${host},${ttl},${probe.proto},${probe.src},${probe.rtt}\n`;
+              });
+            });
+          });
+        });
+        return new Blob([csv], { type: "text/csv" });
+      },
+      pdf: () => {
+        const doc = new jsPDF();
+        doc.setFontSize(10);
+        let y = 10;
+        Object.entries(data).forEach(([target, result]) => {
+          doc.text(`Target: ${target} (${result.host || ""})`, 10, y);
+          y += 6;
+          result.hops.forEach((hop) => {
+            const ttl = hop.ttl;
+            hop.series.forEach((probes) => {
+              probes.forEach((probe) => {
+                doc.text(
+                  `TTL ${ttl} - ${probe.proto} - ${probe.src || "N/A"} - RTT: ${
+                    probe.rtt != null ? probe.rtt.toFixed(2) : "timeout"
+                  }`,
+                  10,
+                  y
+                );
+                y += 6;
+                if (y > 270) {
+                  doc.addPage();
+                  y = 10;
+                }
+              });
+            });
+          });
+          y += 4;
+        });
+        return doc.output("blob");
+      },
+    };
+
+    const blob = blobMap[format]();
+    saveAs(blob, `traceroute_result.${format}`);
+  }
 
   return (
     <Container fluid className="py-4">
+
+      {/* 🆕 Download button dropdown */}
+      <div className="mb-3 d-flex justify-content-end">
+        <DropdownButton id="dropdown-basic-button" title="Download As" variant="secondary">
+          <Dropdown.Item onClick={() => handleDownload(data, "json")}>JSON</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDownload(data, "txt")}>TXT</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDownload(data, "csv")}>CSV</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDownload(data, "pdf")}>PDF</Dropdown.Item>
+        </DropdownButton>
+      </div>
+
       <Row>
-        {/* 🆕 Left Panel: Scrollable IP list and route tables */}
+        {/* Left Panel: Scrollable IP list and route tables */}
         <Col md={5} style={{ maxHeight: "90vh", overflowY: "auto" }}>
           <h4 className="mb-3">Traceroute Destinations</h4>
 
@@ -102,7 +182,7 @@ export default function Result() {
           </Accordion>
         </Col>
 
-        {/* 🆕 Right Panel: Interactive Map */}
+        {/* Right Panel: Interactive Map */}
         <Col md={7}>
           <h4 className="mb-3 text-center">Interactive Map</h4>
           <TraceMap hops={allHops} focus={focusedHop} />
