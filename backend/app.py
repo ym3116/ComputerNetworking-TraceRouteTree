@@ -32,9 +32,14 @@ def api_trace():
         df = pd.DataFrame({"IP": lines, "Hostname": [""] * len(lines)})
     else:
         return jsonify({"error": "Unsupported file type"}), 400
+    
+    print("arrive after file")
 
     targets   = df["IP"].tolist()
     hostnames = df.get("Hostname", pd.Series([""] * len(df))).tolist()
+
+    print(targets)
+    print(hostnames)
 
     raw = run_traceroutes(
         targets, hostnames,
@@ -43,7 +48,13 @@ def api_trace():
         packet_size=60, wait_time=1.0, timeout=2.0,
     )
 
+    print("arrive after runtrace")
+
     results = aggregate_results(raw)
+
+    print(raw)
+    print()
+    print(results)
     return jsonify(results)
 
 if __name__ == "__main__":

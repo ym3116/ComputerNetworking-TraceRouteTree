@@ -9,9 +9,16 @@ export default function Result() {
   const data = location.state?.data;
   // ⬆️ data is the result of the traceroute from the backend
   
-  if (!data || !Array.isArray(data)) {
+  if (!data || typeof data !== "object") {
     return <Alert variant="danger">No result data received.</Alert>;
   }
+
+  const flattened = Object.entries(data).flatMap(([target, result]) =>
+    result.hops.map((hop) => ({
+      target,
+      ...hop
+    }))
+  );
 
   return (
     <Container className="py-4">
@@ -31,7 +38,7 @@ export default function Result() {
           </tr>
         </thead>
         <tbody>
-          {data.map((hop, i) =>
+          {flattened.map((hop, i) =>
             hop.series.map((pkt, j) => (
               <tr key={`${i}-${j}`}>
                 <td>{i + 1}</td>

@@ -25,7 +25,16 @@ export default function Landing() {
       method: "POST",
       body: fd,
     });
+
+    if (!rsp.ok) {
+      const errText = await rsp.text();
+      console.error("Backend error:", errText);
+      alert("Error: " + rsp.status);
+      return;
+    }
+
     const resultData = await rsp.json();
+    console.log(resultData);
     // 1. Takes the result JSON from your backend (i.e. ttl, probes)
     // 2. Passes it to the result page using the navigate function
     navigate("/result", { state: { data: resultData } });
