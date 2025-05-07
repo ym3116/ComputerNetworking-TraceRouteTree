@@ -1,24 +1,39 @@
-// src/pages/Result.js
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Table, Container, Alert } from "react-bootstrap";
+import { Container, Table, Alert } from "react-bootstrap";
 
 export default function Result() {
   const location = useLocation();
   // ⬆️ useLocation() gets access to whatever was passed using navigate('/result', { state: { data } }) in Landing.js
   const data = location.state?.data;
   // ⬆️ data is the result of the traceroute from the backend
-  
+
   if (!data || typeof data !== "object") {
     return <Alert variant="danger">No result data received.</Alert>;
   }
 
-  const flattened = Object.entries(data).flatMap(([target, result]) =>
-    result.hops.map((hop) => ({
-      target,
-      ...hop
-    }))
-  );
+  // flatten structure for table
+  const flattened = Object.entries(data).flatMap(([target, result]) => {
+    const host = result.host || "";
+    const hops = result.hops || [];
+
+    return hops.flatMap((hop) => {
+      const ttl = hop.ttl;
+      const series = hop.series;
+
+      // series is array of arrays, one per protocol
+      return series.flatMap((probes, index) =>
+        probes.map((probe) => ({
+          target,
+          host,
+          ttl,
+          proto: probe.proto,
+          ip: probe.src,
+          rtt: probe.rtt,
+        }))
+      );
+    });
+  });
 
   return (
     <Container className="py-4">
@@ -27,31 +42,25 @@ export default function Result() {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Hop</th>
             <th>Target</th>
+            <th>Host</th>
+            <th>TTL</th>
             <th>Protocol</th>
-            <th>IP</th>
-            <th>Hostname</th>
-            <th>Location</th>
+            <th>Router IP</th>
             <th>RTT (ms)</th>
-            <th>Packet Loss</th>
           </tr>
         </thead>
         <tbody>
-          {flattened.map((hop, i) =>
-            hop.series.map((pkt, j) => (
-              <tr key={`${i}-${j}`}>
-                <td>{i + 1}</td>
-                <td>{hop.target}</td>
-                <td>{pkt.proto}</td>
-                <td>{pkt.ip || "N/A"}</td>
-                <td>{pkt.hostname || "N/A"}</td>
-                <td>{pkt.location || "N/A"}</td>
-                <td>{pkt.rtt != null ? pkt.rtt.toFixed(2) : "timeout"}</td>
-                <td>{pkt.loss != null ? pkt.loss + "%" : "-"}</td>
-              </tr>
-            ))
-          )}
+          {flattened.map((entry, i) => (
+            <tr key={i}>
+              <td>{entry.target}</td>
+              <td>{entry.host}</td>
+              <td>{entry.ttl}</td>
+              <td>{entry.proto}</td>
+              <td>{entry.ip || "N/A"}</td>
+              <td>{entry.rtt != null ? entry.rtt.toFixed(2) : "timeout"}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </Container>
