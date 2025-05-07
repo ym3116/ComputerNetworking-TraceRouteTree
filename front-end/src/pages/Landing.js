@@ -1,25 +1,88 @@
-<<<<<<< Updated upstream
-=======
 // src/pages/Landing.js
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
->>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 
-function Landing() {
+export default function Landing() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    // TODO: 可在这里发请求到 Flask API，然后 navigate
-    navigate("/result");
+  const [file, setFile] = useState(null);
+  const [minTtl, setMinTtl] = useState("");
+  const [maxTtl, setMaxTtl] = useState("");
+  const [probes, setProbes] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!file) return alert("Pick a file first!");
+
+    const fd = new FormData();
+    fd.append("file", file);
+    if (minTtl) fd.append("min_ttl", minTtl);
+    if (maxTtl) fd.append("max_ttl", maxTtl);
+    if (probes) fd.append("probes", probes);
+
+    const rsp = await fetch("http://localhost:5000/api/trace", {
+      method: "POST",
+      body: fd,
+    });
+    const { result_url } = await rsp.json();
+    // redirect through SPA route so we can show a spinner
+    navigate(`/result?url=${encodeURIComponent(result_url)}`);
   };
 
   return (
-    <div>
-      <h1>Main Page</h1>
-      <button onClick={handleClick}>Go to Result</button>
-    </div>
+    <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Card className="shadow" style={{ maxWidth: 600, width: "100%" }}>
+        <Card.Body>
+          <h2 className="mb-4 text-center">TraceViz</h2>
+
+          <Form onSubmit={handleSubmit}>
+            {/* file input */}
+            <Form.Group className="mb-3">
+              <Form.Label>IP list (.csv / .txt)</Form.Label>
+              <Form.Control
+                type="file"
+                accept=".csv,.txt"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </Form.Group>
+
+            {/* parameters */}
+            <Row className="mb-4">
+              <Col>
+                <Form.Control
+                  placeholder="min TTL (default 1)"
+                  type="number"
+                  value={minTtl}
+                  onChange={(e) => setMinTtl(e.target.value)}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  placeholder="max TTL (default 20)"
+                  type="number"
+                  value={maxTtl}
+                  onChange={(e) => setMaxTtl(e.target.value)}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  placeholder="probes (default 3)"
+                  type="number"
+                  value={probes}
+                  onChange={(e) => setProbes(e.target.value)}
+                />
+              </Col>
+            </Row>
+
+            <div className="d-grid">
+              <Button variant="primary" type="submit">
+                Traceroute!
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }
-
-export default Landing;
