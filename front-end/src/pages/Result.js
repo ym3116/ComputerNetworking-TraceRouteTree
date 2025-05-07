@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Table, Alert } from "react-bootstrap";
 import TraceMap from "../components/TraceMap";
@@ -7,6 +7,7 @@ export default function Result() {
   const location = useLocation();
   // ⬆️ useLocation() gets access to whatever was passed using navigate('/result', { state: { data } }) in Landing.js
   const data = location.state?.data;
+  const [focusedHop, setFocusedHop] = useState(null); 
   // ⬆️ data is the result of the traceroute from the backend
 
   if (!data || typeof data !== "object") {
@@ -44,7 +45,7 @@ export default function Result() {
 
       {/* ✅ Map Section */}
       <h4 className="mb-3">Interactive Map</h4>
-      <TraceMap hops={flattened} />
+      <TraceMap hops={flattened} focus={focusedHop} />
 
       {/* ✅ Table Section */}
       <h4 className="mt-5 mb-3">Detailed Table</h4>
@@ -61,7 +62,7 @@ export default function Result() {
         </thead>
         <tbody>
           {flattened.map((entry, i) => (
-            <tr key={i}>
+            <tr key={i} onClick={() => setFocusedHop(entry)} style={{ cursor: "pointer" }}>
               <td>{entry.target}</td>
               <td>{entry.host}</td>
               <td>{entry.ttl}</td>
