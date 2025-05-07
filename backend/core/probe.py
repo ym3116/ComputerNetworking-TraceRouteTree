@@ -3,35 +3,6 @@
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from scapy.all import IP, UDP, TCP, ICMP, sr, conf
-<<<<<<< Updated upstream
-
-conf.verb = 0          # silence Scapy
-
-# ----------------------------------------------------------------------
-# fast per‑target tracer ------------------------------------------------
-# ----------------------------------------------------------------------
-def _trace_target(ip, host, *, min_ttl, max_ttl,
-                  probes_per_ttl, port, packet_size,
-                  timeout, protos=('UDP', 'TCP', 'ICMP')):
-    """
-    Build one big batch of probes (TTL × proto × probes_per_ttl),
-    send them in a single sr() call, collate replies.
-    Returns {'host': host, 'hops': [...] }  — identical shape to old code.
-    """
-    pkts = []
-    for ttl in range(min_ttl, max_ttl + 1):
-        for proto in protos:
-            for _ in range(probes_per_ttl):
-                ip_layer = IP(dst=ip, ttl=ttl)
-                l4 = UDP(dport=port)   if proto == 'UDP' else \
-                     TCP(dport=port, flags='S') if proto == 'TCP' else \
-                     ICMP()
-                payload = b'X' * max(0, packet_size - len(ip_layer))  # pad
-                pkts.append(ip_layer / l4 / payload)
-
-    answered, _ = sr(pkts, timeout=timeout)
-
-=======
 from ipinfo import getHandler
 
 conf.verb = 0          # silence Scapy
@@ -77,7 +48,6 @@ def _trace_target(ip, host, *, min_ttl, max_ttl,
 
     answered, _ = sr(pkts, timeout=timeout)
 
->>>>>>> Stashed changes
     # map (ttl, proto) -> best response (first wins)
     resp_map = {}
     for snd, rcv in answered:
@@ -94,15 +64,6 @@ def _trace_target(ip, host, *, min_ttl, max_ttl,
     for ttl in range(min_ttl, max_ttl + 1):
         series = []
         for proto in protos:
-<<<<<<< Updated upstream
-            series.append([resp_map.get((ttl, proto), {
-                'proto': proto, 'rtt': None, 'src': None, 'code': None
-            })])
-        hops.append({'ttl': ttl, 'series': series})
-        if any(e['src'] == ip for s in series for e in s):
-            break
-
-=======
             entry = resp_map.get((ttl, proto), {
             'proto': proto, 'rtt': None, 'src': None, 'code': None
             })
@@ -114,7 +75,6 @@ def _trace_target(ip, host, *, min_ttl, max_ttl,
         if any(e['src'] == ip for s in series for e in s):
             break
 
->>>>>>> Stashed changes
     return {'host': host or None, 'hops': hops}
 
 # ----------------------------------------------------------------------
