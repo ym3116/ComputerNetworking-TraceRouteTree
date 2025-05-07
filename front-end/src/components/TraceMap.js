@@ -1,9 +1,10 @@
 // front-end/src/components/TraceMap.js
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from "react-leaflet";
+import { useMap, MapContainer, TileLayer, Marker, Polyline, Popup } from "react-leaflet";
+import { useEffect } from "react";
 import L from "leaflet";
 
-export default function TraceMap({ hops }) {
+export default function TraceMap({ hops, focus }) {
   const [showTCP, setShowTCP] = useState(true);
   const [showUDP, setShowUDP] = useState(true);
   const [showICMP, setShowICMP] = useState(true);
@@ -21,6 +22,19 @@ export default function TraceMap({ hops }) {
     }, {})
   );
 
+  function FlyTo({ lat, lon }) {
+    const map = useMap();
+  
+    useEffect(() => {
+      if (lat != null && lon != null) {
+        map.flyTo([lat, lon], 10);
+      }
+    }, [lat, lon, map]);
+  
+    return null;
+  }
+  
+
   return (
     <div>
       <div style={{ marginBottom: 10 }}>
@@ -31,6 +45,7 @@ export default function TraceMap({ hops }) {
 
       <MapContainer center={[30, 0]} zoom={2} scrollWheelZoom style={{ height: "500px", width: "100%" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {focus && <FlyTo lat={focus.lat} lon={focus.lon} />}
         
         {grouped.map(([proto, pts], i) => (
           <Polyline key={i} positions={pts.map(p => [p.lat, p.lon])} color={colors[proto]} />
