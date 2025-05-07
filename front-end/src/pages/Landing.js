@@ -21,7 +21,7 @@ export default function Landing() {
     if (maxTtl) fd.append("max_ttl", maxTtl);
     if (probes) fd.append("probes", probes);
 
-    const rsp = await fetch("http://localhost:5000/api/trace", {
+    const rsp = await fetch("http://127.0.0.1:5000/api/trace", {
       method: "POST",
       body: fd,
     });
