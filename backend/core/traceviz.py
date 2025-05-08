@@ -19,7 +19,7 @@ import argparse, sys, webbrowser, pandas as pd
 import os
 from core.probe import run_traceroutes               # probe,traceroute.py
 from core.parser import save_aggregated            # parser.py
-from core.interactive_viz import build_page # interactive_viz.py
+
 # core/traceviz.py
 
 # progress_status = {"progress": 0}
