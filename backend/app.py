@@ -34,8 +34,15 @@ def api_trace():
     ext = tmp.suffix.lower()
     if ext == ".csv":
         df = pd.read_csv(tmp)
+        df.columns = df.columns.str.strip()
         if "IP" not in df.columns:
             return jsonify({"error": "CSV file must contain 'IP' column."}), 400
+        if "Hostname" not in df.columns:
+            df["Hostname"] = ""
+        else:
+            df["Hostname"] = df["Hostname"].fillna("")  
+
+        df = df[df["IP"].notnull()]
 
     elif ext == ".txt":
         # resolves txt not recognize problem
