@@ -513,6 +513,10 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import TraceMap from "../components/TraceMap";
 import "./Result.css";
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+
 
 export default function Result() {
   const location = useLocation();
@@ -555,14 +559,106 @@ export default function Result() {
     return acc;
   }, {});
 
+
+  // Flattened list of all hops across all destinations (for map)
+
   const allHops = Object.values(grouped).flatMap((entry) => entry.hops);
+
+
+  // 🆕 Converts and downloads result as chosen format
+  function handleDownload(data, format = "json") {
+    const blobMap = {
+      json: () =>
+        new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        }),
+      txt: () =>
+        new Blob([JSON.stringify(data, null, 2)], {
+          type: "text/plain",
+        }),
+      csv: () => {
+        let csv = "Target,Host,TTL,Protocol,IP,RTT\n";
+        Object.entries(data).forEach(([target, result]) => {
+          const host = result.host || "";
+          const hops = result.hops || [];
+          hops.forEach((hop) => {
+            const ttl = hop.ttl;
+            const series = hop.series;
+            series.forEach((probes) => {
+              probes.forEach((probe) => {
+                csv += `${target},${host},${ttl},${probe.proto},${probe.src},${probe.rtt}\n`;
+              });
+            });
+          });
+        });
+        return new Blob([csv], { type: "text/csv" });
+      },
+      pdf: () => {
+        const doc = new jsPDF();
+        doc.setFontSize(10);
+        let y = 10;
+        Object.entries(data).forEach(([target, result]) => {
+          doc.text(`Target: ${target} (${result.host || ""})`, 10, y);
+          y += 6;
+          result.hops.forEach((hop) => {
+            const ttl = hop.ttl;
+            hop.series.forEach((probes) => {
+              probes.forEach((probe) => {
+                doc.text(
+                  `TTL ${ttl} - ${probe.proto} - ${probe.src || "N/A"} - RTT: ${
+                    probe.rtt != null ? probe.rtt.toFixed(2) : "timeout"
+                  }`,
+                  10,
+                  y
+                );
+                y += 6;
+                if (y > 270) {
+                  doc.addPage();
+                  y = 10;
+                }
+              });
+            });
+          });
+          y += 4;
+        });
+        return doc.output("blob");
+      },
+    };
+
+    const blob = blobMap[format]();
+    saveAs(blob, `traceroute_result.${format}`);
+  }
 
   return (
     <div className="result-wrapper">
       <div className="result-panel">
         <h1 className="result-title">Trace Results</h1>
+
+        {/* 🆕 Download button dropdown */}
+        <div className="mb-3 d-flex justify-content-end">
+          <DropdownButton
+            id="dropdown-basic-button"
+            title="Download As"
+            variant="secondary"
+          >
+            <Dropdown.Item onClick={() => handleDownload(data, "json")}>
+              JSON
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleDownload(data, "txt")}>
+              TXT
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleDownload(data, "csv")}>
+              CSV
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleDownload(data, "pdf")}>
+              PDF
+            </Dropdown.Item>
+          </DropdownButton>
+        </div>
+
         <div className="result-content">
           <div className="result-left">
+            {/* ✅ Search bar */}
             <input
               type="text"
               placeholder="Search by IP or Hostname..."
@@ -581,6 +677,7 @@ export default function Result() {
               }}
             />
 
+            {/* ✅ Destination Tables */}
             {Object.entries(grouped)
               .filter(([target, { host }]) =>
                 target.includes(searchTerm) || host.includes(searchTerm)
@@ -649,6 +746,8 @@ export default function Result() {
                 </div>
               ))}
           </div>
+
+          {/* ✅ Map Panel */}
           <div className="result-map">
             <h2 className="result-subtitle text-center">Interactive Map</h2>
             <TraceMap
@@ -661,4 +760,3 @@ export default function Result() {
       </div>
     </div>
   );
-}
