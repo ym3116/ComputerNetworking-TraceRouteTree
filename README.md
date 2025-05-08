@@ -38,15 +38,13 @@ run the following code in your terminal:
 python3 -m venv venv
 source venv/bin/activate
 
-# Install Python dependencies
-pip install -r requirements.txt
-
-# To start the backend
+# Install Python dependencies and start the backend
 cd backend
+pip install -r requirements.txt
 python app.py
 ```
 This will run the backend API at:
-📍 http://localhost:5000
+📍 http://127.0.0.1:5000
 
 ### 3. Set Up the Frontend (React)
 
