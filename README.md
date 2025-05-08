@@ -56,7 +56,28 @@ npm start
 ```
 This will open the app in your browser at:
 📍 http://localhost:3000
+---
 
+### ⚠️ Scapy Permission Issue (`/dev/bpf0`)
+
+If you couldn't see any results after clicking the traceroute button, this might be a scapy permission issue.
+
+Permission denied: could not open /dev/bpf0. Make sure to be running Scapy as root! (sudo)
+
+#### On Mac OS or Lunix
+
+This error occurs because Scapy needs root (administrator) access to interact with low-level network interfaces like `/dev/bpf0`. To resolve this issue, follow these steps:
+
+1. **Run Scapy as Root (with `sudo`)**
+
+   run your Python script as root to allow Scapy to access network interfaces.
+
+   Run your script with `sudo`:
+
+   ```bash
+   sudo python3 backend/app.py
+   ```
+   
 
 
 
