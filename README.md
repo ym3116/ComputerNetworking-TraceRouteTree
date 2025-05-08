@@ -35,7 +35,6 @@ cd ComputerNetworking-TraceViz
 
 run the following code in your terminal:
 ```bash
-cd backend
 python3 -m venv venv
 source venv/bin/activate
 
@@ -43,6 +42,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # To start the backend
+cd backend
 python app.py
 ```
 This will run the backend API at:
