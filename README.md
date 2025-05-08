@@ -33,6 +33,8 @@ cd ComputerNetworking-TraceViz
 
 ### 2. Set Up and Start the Backend (Python + Flask)
 
+Please make sure that your computer have installed Node js and Python.
+
 run the following code in your terminal:
 ```bash
 python3 -m venv venv
