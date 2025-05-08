@@ -1,0 +1,102 @@
+/* src/pages/Landing.css */
+
+:root {
+  --primary-color: #1d2b64;
+  --accent-color: #f8cdda;
+  --bg-color: #f2f2f2;
+  --font-main: 'Poppins', sans-serif;
+  --card-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+}
+
+.landing-background {
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.card {
+  border-radius: 1.5rem !important;
+  box-shadow: var(--card-shadow);
+  border: none;
+}
+
+.landing-title {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+form input[type="file"] {
+  padding: 0.6rem;
+  font-size: 1rem;
+}
+
+.form-control {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  box-shadow: none !important;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(29, 43, 100, 0.2);
+}
+
+button[type="submit"] {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+  transition: all 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+  background-color: #152052;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 576px) {
+  .form-control-sm {
+    font-size: 0.9rem;
+  }
+
+  button[type="submit"] {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+}
+
+
+.loading-bar-container {
+    height: 10px;
+    width: 100%;
+    background: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .loading-fill {
+    height: 100%;
+    background: linear-gradient(to right, #00f2ff, #0ff);
+    transition: width 0.4s ease-in-out;
+  }
+  
+  
+  

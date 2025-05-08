@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+
+.loading-bar {
+  height: 6px;
+  margin-top: 10px;
+  width: 100%;
+  background: linear-gradient(270deg, #00f2ff, #0ff, #00f2ff);
+  background-size: 600% 100%;
+  animation: loading-glow 2s linear infinite;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+@keyframes loading-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}

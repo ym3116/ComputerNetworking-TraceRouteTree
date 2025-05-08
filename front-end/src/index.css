@@ -11,3 +11,48 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+  }
+  to {
+    text-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+  }
+}
+
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px #00f2ff, 0 0 48px #00f2ff;
+  border-color: #0ff;
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+
+.loading-bar {
+  height: 6px;
+  margin-top: 10px;
+  width: 100%;
+  background: linear-gradient(270deg, #00f2ff, #0ff, #00f2ff);
+  background-size: 600% 100%;
+  animation: loading-glow 2s linear infinite;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+@keyframes loading-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+
