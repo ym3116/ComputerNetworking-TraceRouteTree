@@ -1,0 +1,25 @@
+# Ignore virtual environment folder
+venv/
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore environment-specific files
+.DS_Store      # macOS system file
+Thumbs.db      # Windows system file
+
+# Ignore IDE configuration files
+.vscode/        # Visual Studio Code
+.idea/          # JetBrains IDEs (PyCharm, IntelliJ)
+*.swp           # Vim swap files
+
+# Ignore Flask or other Python-related caches or logs
+*.log
+*.pot
+*.pyc
+
+# Ignore dependency lock files if you don't want them versioned
+# Uncomment this line if you're not using `Pipenv` or `Poetry`
+# Pipfile.lock
