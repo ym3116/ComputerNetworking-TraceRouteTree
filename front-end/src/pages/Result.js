@@ -19,7 +19,7 @@ export default function Result() {
   if (!data || typeof data !== "object") {
     return (
       <div className="result-wrapper">
-        <p className="error-message">No result data received.</p>
+        <p className="error-message">No result data received. Please go to landing page and execute traceroute first.</p>
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function Result() {
         <div className="mb-3 d-flex justify-content-end">
           <DropdownButton
             id="dropdown-basic-button"
-            title="Download As"
+            title="Download Origin Traceroute Result As"
             variant="secondary"
           >
             <Dropdown.Item onClick={() => handleDownload(data, "json")}>
@@ -146,23 +146,12 @@ export default function Result() {
 
         <div className="result-content">
           <div className="result-left">
-            {/* Search bar */}
             <input
               type="text"
               placeholder="Search by IP or Hostname..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "20px",
-                fontSize: "1rem",
-                borderRadius: "8px",
-                border: "1px solid #333",
-                backgroundColor: "#111",
-                color: "#fff",
-                fontFamily: "'Times New Roman', serif",
-              }}
+              className="result-search"
             />
 
             {/* Destination Tables with toggle */}
@@ -175,13 +164,7 @@ export default function Result() {
 
                 return (
                   <div key={idx} className="result-card">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}
+                    <div className="result-card-header"
                       onClick={() =>
                         setExpanded((prev) => ({
                           ...prev,
@@ -192,22 +175,11 @@ export default function Result() {
                       <h2 className="result-subtitle" style={{ margin: 0 }}>
                         {target} {host && <span>({host})</span>}
                       </h2>
-                      <button
+                      <button className="play-button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setFocusedHop(null);
                           setPlayingTarget(target);
-                        }}
-                        style={{
-                          padding: "6px 12px",
-                          borderRadius: "8px",
-                          backgroundColor: "#00f2ff",
-                          border: "none",
-                          fontFamily: "'Orbitron', sans-serif",
-                          fontWeight: "bold",
-                          color: "#000",
-                          cursor: "pointer",
-                          boxShadow: "0 0 6px #00f2ff",
                         }}
                       >
                         Play
@@ -216,7 +188,7 @@ export default function Result() {
 
                     {/* Toggleable Hop Table */}
                     {isOpen && (
-                      <table className="result-table" style={{ marginTop: "10px" }}>
+                      <table className="result-table">
                         <thead>
                           <tr>
                             <th>TTL</th>
@@ -230,7 +202,7 @@ export default function Result() {
                             <tr
                               key={i}
                               onClick={() => setFocusedHop(entry)}
-                              style={{ cursor: "pointer" }}
+                              className="result-row"
                             >
                               <td>{entry.ttl}</td>
                               <td>{entry.proto}</td>

@@ -439,12 +439,55 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
+
+const iconShadow = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png";
+
+const protocolIcons = {
+  TCP: L.icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+    shadowUrl: iconShadow,
+    iconSize: [20, 32],
+    iconAnchor: [10, 32],
+    popupAnchor: [1, -28],
+    shadowSize: [41, 41],
+  }),
+  UDP: L.icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
+    shadowUrl: iconShadow,
+    iconSize: [20, 32],
+    iconAnchor: [10, 32],
+    popupAnchor: [1, -28],
+    shadowSize: [41, 41],
+  }),
+  ICMP: L.icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+    shadowUrl: iconShadow,
+    iconSize: [20, 32],
+    iconAnchor: [10, 32],
+    popupAnchor: [1, -28],
+    shadowSize: [41, 41],
+  }),
+};
+
+const destinationIcon = L.icon({
+  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png",
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+
+
 export default function TraceMap({ hops, focus, playingTarget }) {
   const [showTCP, setShowTCP] = useState(true);
   const [showUDP, setShowUDP] = useState(true);
   const [showICMP, setShowICMP] = useState(true);
   const [visibleTTL, setVisibleTTL] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hoveredHop, setHoveredHop] = useState(null);
+  const [hasFlownToFocus, setHasFlownToFocus] = useState(false);
 
   const show = { TCP: showTCP, UDP: showUDP, ICMP: showICMP };
   const colors = { TCP: "red", UDP: "blue", ICMP: "green" };
@@ -453,11 +496,17 @@ export default function TraceMap({ hops, focus, playingTarget }) {
     ? hops.filter((h) => h.target === playingTarget)
     : [];
 
+  const destinationHop = hopsForTarget
+    .slice()
+    .reverse()
+    .find((h) => h.lat != null && h.lon != null);
+
   const filtered = hopsForTarget.filter((h) => show[h.proto] && h.lat && h.lon);
   const hidden = hopsForTarget.filter((h) => h.lat == null || h.lon == null);
   const maxTTL = Math.max(...filtered.map((h) => h.ttl || 0));
   const mapCenter = [30, 0];
 
+  const currentHop = filtered.find((h) => h.ttl === visibleTTL);
   const filteredUpToTTL = filtered.filter(
     (h) => visibleTTL == null || h.ttl <= visibleTTL
   );
@@ -470,13 +519,17 @@ export default function TraceMap({ hops, focus, playingTarget }) {
     }, {})
   );
 
+  useEffect(() => {
+    if (focus) setHasFlownToFocus(false);
+  }, [focus]);
+
   function FlyToHop({ currentHop }) {
     const map = useMap();
     useEffect(() => {
-      if (currentHop?.lat && currentHop?.lon) {
-        map.flyTo([currentHop.lat, currentHop.lon], 5, { duration: 1 });
+      if (currentHop?.lat && currentHop?.lon && !hasFlownToFocus) {
+        map.flyTo([currentHop.lat, currentHop.lon], 10, { duration: 1 });
       }
-    }, [currentHop, map]);
+    }, [currentHop, hasFlownToFocus, map]);
     return null;
   }
 
@@ -496,20 +549,51 @@ export default function TraceMap({ hops, focus, playingTarget }) {
     }, 500);
   }
 
-  const currentHop = filtered.find((h) => h.ttl === visibleTTL);
+  function getFocusedIcon(proto) {
+    const urlMap = {
+      TCP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+      UDP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
+      ICMP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+    };
+  
+    const iconUrl = urlMap[proto] || urlMap.TCP;
+  
+    return L.icon({
+      iconUrl,
+      shadowUrl: iconShadow,
+      iconSize: [28, 45],
+      iconAnchor: [14, 45],
+      popupAnchor: [1, -38],
+      shadowSize: [41, 41],
+    });
+  }
+
+  function getHoverIcon(proto) {
+    const urlMap = {
+      TCP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+      UDP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
+      ICMP: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+    };
+  
+    const iconUrl = urlMap[proto] || urlMap.TCP;
+  
+    return L.icon({
+      iconUrl,
+      shadowUrl: iconShadow,
+      iconSize: [24, 38],      
+      iconAnchor: [12, 38],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+  }
+  
 
   return (
     <div>
       <div style={{ marginBottom: 10, color: "#00f2ff", fontFamily: "'Orbitron', sans-serif" }}>
-        <label>
-          <input type="checkbox" checked={showTCP} onChange={() => setShowTCP(!showTCP)} /> TCP
-        </label>{" "}
-        <label>
-          <input type="checkbox" checked={showUDP} onChange={() => setShowUDP(!showUDP)} /> UDP
-        </label>{" "}
-        <label>
-          <input type="checkbox" checked={showICMP} onChange={() => setShowICMP(!showICMP)} /> ICMP
-        </label>
+        <label><input type="checkbox" checked={showTCP} onChange={() => setShowTCP(!showTCP)} /> TCP</label>{" "}
+        <label><input type="checkbox" checked={showUDP} onChange={() => setShowUDP(!showUDP)} /> UDP</label>{" "}
+        <label><input type="checkbox" checked={showICMP} onChange={() => setShowICMP(!showICMP)} /> ICMP</label>
       </div>
 
       {hidden.length > 0 && (
@@ -565,6 +649,8 @@ export default function TraceMap({ hops, focus, playingTarget }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
         />
 
+        {focus && <FlyToHop currentHop={focus} />}
+
         {visibleTTL != null && currentHop && <FlyToHop currentHop={currentHop} />}
 
         {groupedByProto.map(([proto, pts], i) => {
@@ -585,33 +671,54 @@ export default function TraceMap({ hops, focus, playingTarget }) {
           ));
         })}
 
-        {filteredUpToTTL.map((h, i) => (
+        {filteredUpToTTL
+          .filter(
+            (h) =>
+              !destinationHop ||
+              h.lat !== destinationHop.lat ||
+              h.lon !== destinationHop.lon
+          )
+          .map((h, i) => (
+            <Marker
+              key={i}
+              position={[h.lat, h.lon]}
+              icon={
+                focus?.lat === h.lat && focus?.lon === h.lon
+                  ? getFocusedIcon(h.proto)
+                  : hoveredHop?.lat === h.lat && hoveredHop?.lon === h.lon
+                  ? getHoverIcon(h.proto)
+                  : protocolIcons[h.proto] || protocolIcons.TCP
+              }
+              eventHandlers={{
+                mouseover: () => setHoveredHop(h),
+                mouseout: () => setHoveredHop(null),
+              }}
+            >
+              <Popup>
+                <b>{h.proto}</b>
+                <br />
+                IP: {h.ip}
+                <br />
+                RTT: {h.rtt != null ? h.rtt.toFixed(2) + " ms" : "timeout"}
+              </Popup>
+            </Marker>
+          ))}
+
+        {destinationHop && (
           <Marker
-            key={i}
-            position={[h.lat, h.lon]}
-            icon={
-              focus?.lat === h.lat && focus?.lon === h.lon
-                ? L.icon({
-                    iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-orange.png",
-                    iconSize: [30, 48],
-                    iconAnchor: [15, 48],
-                  })
-                : L.icon({
-                    iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-red.png",
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                  })
-            }
+            position={[destinationHop.lat, destinationHop.lon]}
+            icon={destinationIcon}
           >
             <Popup>
-              <b>{h.proto}</b>
+              <b>Destination Server</b>
               <br />
-              IP: {h.ip}
+              IP: {destinationHop.ip}
               <br />
-              RTT: {h.rtt != null ? h.rtt.toFixed(2) + " ms" : "timeout"}
+              Protocol: {destinationHop.proto}
             </Popup>
           </Marker>
-        ))}
+        )}
+
       </MapContainer>
     </div>
   );
