@@ -27,8 +27,8 @@
 ### 1. Clone the Repo
 
 ```bash
-git clone 
-cd traceviz
+git clone https://github.com/ym3116/ComputerNetworking-TraceViz
+cd ComputerNetworking-TraceViz
 ```
 
 ### 2. Set Up and Start the Backend (Python + Flask)
