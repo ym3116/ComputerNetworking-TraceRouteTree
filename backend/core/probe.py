@@ -83,31 +83,44 @@ def _trace_target(ip, host, *, min_ttl, max_ttl,
 def run_traceroutes(targets, hostnames, min_ttl, max_ttl,
                     probes_per_ttl, port, packet_size,
                     wait_time,          # kept for signature compatibility
-                    timeout):
+                    timeout,
+                    progress_callback=None):  # NEW
     """
     Launch one traceroute per destination in parallel threads.
-    Returns the same dict shape the old implementation produced.
+    Accepts an optional progress_callback(done, total).
     """
     results = {}
+    total = len(targets)
+    done = 0
+
+    def wrapped_trace(ip, host):
+        nonlocal done
+        result = _trace_target(
+            ip, host,
+            min_ttl=min_ttl, max_ttl=max_ttl,
+            probes_per_ttl=probes_per_ttl,
+            port=port, packet_size=packet_size,
+            timeout=timeout
+        )
+        done += 1
+        if progress_callback:
+            progress_callback(done, total)
+        return ip, result
+
     with ThreadPoolExecutor(max_workers=len(targets)) as pool:
-        fut = {
-            pool.submit(
-                _trace_target, ip, host,
-                min_ttl=min_ttl, max_ttl=max_ttl,
-                probes_per_ttl=probes_per_ttl,
-                port=port, packet_size=packet_size,
-                timeout=timeout
-            ): ip
-            for ip, host in zip(targets, hostnames)
-        }
-        for f in as_completed(fut):
-            ip = fut[f]
+        futures = [pool.submit(wrapped_trace, ip, host)
+                   for ip, host in zip(targets, hostnames)]
+        for future in as_completed(futures):
             try:
-                results[ip] = f.result()
+                ip, result = future.result()
+                results[ip] = result
             except Exception as e:
+                ip = targets[futures.index(future)]
                 results[ip] = {'host': hostnames[targets.index(ip)], 'hops': [],
                                'error': str(e)}
+
     return results
+
 
 # optional stub in case some script still imports it
 def single_probe(*_a, **_kw):

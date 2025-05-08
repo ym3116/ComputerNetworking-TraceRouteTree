@@ -17,9 +17,31 @@ Typical use:
 
 import argparse, sys, webbrowser, pandas as pd
 import os
-from probe import run_traceroutes               # probe,traceroute.py
-from parser import save_aggregated            # parser.py
-from interactive_viz import build_page # interactive_viz.py
+from core.probe import run_traceroutes               # probe,traceroute.py
+from core.parser import save_aggregated            # parser.py
+from core.interactive_viz import build_page # interactive_viz.py
+# core/traceviz.py
+
+# progress_status = {"progress": 0}
+
+# def run_traceroute(targets):
+#     import time
+#     results = []
+#     total = len(targets)
+#     if total == 0:
+#         progress_status["progress"] = 100
+#         return results
+
+#     for i, target in enumerate(targets):
+#         # Simulate traceroute logic
+#         time.sleep(1)
+#         results.append({"target": target, "status": "done"})
+#         progress_status["progress"] = int((i + 1) / total * 100)
+
+#     return results
+
+
+
 
 def cmd_run(args):
     ext = os.path.splitext(args.targets)[-1].lower()
@@ -54,7 +76,18 @@ def cmd_view(args):
     print("Opening", html)
     webbrowser.open(html.as_uri())
 
+
+
+# Try to track the progress dynamically:
+import time
+# Shared progress state
+
+
+
+
+
 def main():
+    
     p = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
 
@@ -79,5 +112,12 @@ def main():
     args = p.parse_args()
     args.func(args)
 
+
+
+
+
+
+
 if __name__ == "__main__":
+    
     main()
