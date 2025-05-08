@@ -5,6 +5,7 @@ import tempfile
 import pandas as pd
 from pathlib import Path
 import threading
+import re
 
 from core.probe import run_traceroutes
 from core.parser import aggregate_results
@@ -37,8 +38,23 @@ def api_trace():
             return jsonify({"error": "CSV file must contain 'IP' column."}), 400
 
     elif ext == ".txt":
+        # resolves txt not recognize problem
+        #lines = [line.strip() for line in tmp.read_text().splitlines() if line.strip()]
+        #df = pd.DataFrame({"IP": lines, "Hostname": [""] * len(lines)})
         lines = [line.strip() for line in tmp.read_text().splitlines() if line.strip()]
-        df = pd.DataFrame({"IP": lines, "Hostname": [""] * len(lines)})
+        ips, hosts = [], []
+
+        for line in lines:
+            parts = [p.strip() for p in line.split(",")]
+            if len(parts) >= 1 and re.match(r"^\d{1,3}(\.\d{1,3}){3}$", parts[0]):
+                ips.append(parts[0])
+                hosts.append(parts[1] if len(parts) > 1 else "")
+
+        df = pd.DataFrame({"IP": ips, "Hostname": hosts})
+        if df.empty:
+            return jsonify({"error": "No valid IPs found in input file"}), 400
+
+
     else:
         return jsonify({"error": "Unsupported file type"}), 400
 
