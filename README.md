@@ -56,7 +56,7 @@ Root
 ├── venv/                           -- Python virtual environment 
 │                                   -- (backend only, appears after installing requirements.txt)
 │
-├── README.md                       -- Project overview
+├── README.md                       -- Project features, structure and how to run code
 └── .gitignore                      -- Git ignore rules
 ```
 
