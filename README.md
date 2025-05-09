@@ -64,6 +64,7 @@ Root
 
 ## Directly Access (Experimental support)
 
+You can directly tryout our project through:
 http://159.65.7.227
 
 ## 📦 Setup Instructions
