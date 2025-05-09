@@ -62,6 +62,10 @@ Root
 
 ---
 
+## Directly Access (Experimental support)
+
+http://159.65.7.227
+
 ## 📦 Setup Instructions
 
 ### 1. Clone the Repo
