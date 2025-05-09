@@ -1,4 +1,0 @@
-IP,Hostname
-8.8.8.8,dns.google
-23.235.33.205,www.cloudflare.com
-104.244.42.65, twitter.com
